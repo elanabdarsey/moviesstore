@@ -36,6 +36,18 @@ def create_review(request, id):
         return redirect('movies.show', id=id)
     else:
         return redirect('movies.show', id=id)
+@login_required
+def create_comment(request, id):
+    if request.method == 'POST' and request.POST['comment'] != '':
+        movie = Movie.objects.get(id=id)
+        comments = Comment()
+        comments.comment = request.POST['comment']
+        comments.movie = movie
+        comments.user = request.user
+        comments.save()
+        return redirect('movies.show', id=id)
+    else:
+        return redirect('movies.show', id=id)
 
 @login_required
 def edit_review(request, id, review_id):
